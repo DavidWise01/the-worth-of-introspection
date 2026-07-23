@@ -1,0 +1,9 @@
+ROOT0-DLW-CHAIN-v1
+index : 1490
+slug  : the-worth-of-introspection
+seal  : 39ac574eb28b49365b9cb5bb1f4d57c9a9b642c04ba3aca350648c0c8f9b3467
+prev  : cb49287545d5a950bb599bfb3fde338347d4d570f41df378453bd65829062183
+link  : d58581ceed693fc764e41551a6763745bbd4dc3cd89041462b3337d57b62ad2e
+head  : 2b2c3b26f9693f6bed9cb93b8ae38a250eaae7f250d85c81c2077a71dd3f2d8a
+
+— the tether: link = sha256(index|slug|seal|prev). the chain head commits to the whole corpus.
