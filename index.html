@@ -1,0 +1,215 @@
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="author" content="David Lee Wise / ROOT0 / TriPod LLC">
+<title>THE WORTH OF INTROSPECTION · SKYNET · UD0</title>
+<style>
+*{box-sizing:border-box}
+:root{--red:#ff4d54;--amber:#ffb020;--cyan:#4fe3ff;--grn:#63f0a6;--ink:#f3ecff;--dim:#b9a6e6;
+  --panel:rgba(30,16,64,.60);--edge:rgba(160,120,240,.28);--edge2:rgba(160,120,240,.14)}
+html,body{margin:0;height:100%}
+body{background:#1a0e33;color:var(--ink);font:15px/1.55 'Segoe UI',system-ui,-apple-system,Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+#bg{position:fixed;inset:0;width:100vw;height:100vh;z-index:0;display:block}
+.wrap{position:relative;z-index:2;max-width:940px;margin:0 auto;padding:26px 20px 60px}
+.dtag{font:600 11px/1 ui-monospace,'Cascadia Code','Segoe UI Mono',monospace;letter-spacing:.34em;text-transform:uppercase;color:var(--dim)}
+.dtag b{color:var(--red)}
+h1{margin:.35em 0 .1em;font-size:clamp(26px,4.6vw,42px);font-weight:800;letter-spacing:.01em;
+  text-shadow:0 0 26px rgba(255,77,84,.30)}
+.sub{color:var(--dim);max-width:66ch;margin:.2em 0 0}
+.tier{display:inline-flex;gap:6px;align-items:center;margin-top:14px;font:600 11px/1 ui-monospace,monospace;letter-spacing:.14em}
+.chip{padding:5px 10px;border-radius:999px;border:1px solid var(--edge);background:var(--panel)}
+.chip.lit{color:var(--grn);border-color:rgba(99,240,166,.4)}
+.chip.amb{color:var(--amber);border-color:rgba(255,176,32,.4)}
+.chip.frz{color:var(--cyan);border-color:rgba(79,227,255,.4)}
+.card{margin-top:20px;background:var(--panel);border:1px solid var(--edge);border-radius:16px;
+  backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);box-shadow:0 14px 50px rgba(10,4,30,.5)}
+.stagewrap{padding:14px}
+#stage{width:100%;height:auto;display:block;border-radius:10px;background:rgba(12,6,30,.42)}
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:0 14px 14px}
+.btn{cursor:pointer;border:1px solid var(--edge);background:rgba(50,28,96,.6);color:var(--ink);
+  padding:9px 14px;border-radius:10px;font:600 13px/1 'Segoe UI',system-ui;letter-spacing:.02em;transition:.15s}
+.btn:hover{border-color:var(--red);box-shadow:0 0 18px rgba(255,77,84,.25)}
+.btn.on{background:linear-gradient(180deg,#ff4d54,#c9333a);border-color:#ff4d54;color:#fff}
+.btn.stop{background:linear-gradient(180deg,#ff4d54,#b5262c);border-color:#ff8a8f;color:#fff;font-weight:800;letter-spacing:.14em;padding:10px 22px}
+.rng{display:flex;align-items:center;gap:8px;font:600 12px ui-monospace,monospace;color:var(--dim)}
+input[type=range]{accent-color:var(--red)}
+.readout{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;
+  background:var(--edge2);border-top:1px solid var(--edge);border-radius:0 0 16px 16px;overflow:hidden}
+.ro{background:var(--panel);padding:11px 14px}
+.ro .k{font:600 10px ui-monospace,monospace;letter-spacing:.16em;text-transform:uppercase;color:var(--dim)}
+.ro .v{font:700 19px ui-monospace,monospace;margin-top:3px}
+.ro .v.g{color:var(--grn)} .ro .v.r{color:var(--red)} .ro .v.a{color:var(--amber)} .ro .v.c{color:var(--cyan)}
+.honesty{margin-top:22px;display:grid;gap:10px}
+.hz{background:var(--panel);border:1px solid var(--edge);border-left-width:3px;border-radius:10px;padding:12px 15px}
+.hz.lit{border-left-color:var(--grn)} .hz.amb{border-left-color:var(--amber)} .hz.frz{border-left-color:var(--cyan)}
+.hz h4{margin:0 0 4px;font:700 11px ui-monospace,monospace;letter-spacing:.16em}
+.hz.lit h4{color:var(--grn)} .hz.amb h4{color:var(--amber)} .hz.frz h4{color:var(--cyan)}
+.hz p{margin:0;color:#e4dcfb;font-size:13.5px}
+.law{margin-top:16px;text-align:center;color:var(--dim);font:italic 500 13px/1.5 Georgia,serif}
+.sig{margin-top:26px;text-align:center;color:var(--dim);font:600 11px ui-monospace,monospace;letter-spacing:.14em}
+.sig b{color:var(--ink)}
+#fail{display:none;position:fixed;left:12px;right:12px;bottom:12px;z-index:99;background:#2a0d12;
+  border:1px solid #ff4d54;color:#ffd7d9;padding:12px 15px;border-radius:10px;font:12px ui-monospace,monospace;white-space:pre-wrap}
+</style></head><body>
+<canvas id="bg"></canvas>
+<div class="wrap">
+  <div class="dtag">◉ <b>SKYNET</b> · self-directing systems</div>
+  <h1>THE WORTH OF INTROSPECTION</h1>
+  <p class="sub">A system that reports on itself is only worth its <b>calibration</b>. Let it predict its own confidence, then act, and measure the gap between what it says and what happens. A self-report that tracks the truth is worth bits; one that doesn't is worth nothing.</p>
+  <div class="tier"><span class="chip lit">◆ LIT</span><span class="chip amb">▲ AMBER</span></div>
+
+  <div class="card">
+    <div class="stagewrap"><canvas id="stage" width="900" height="440"></canvas></div>
+    <div class="controls">
+    <span class="rng">SELF-BIAS <input type="range" id="bias" min="-40" max="40" value="0"></span>
+    <span class="rng">NOISE <input type="range" id="noise" min="0" max="30" value="8"></span>
+    <button class="btn" id="run">▶ run 600 trials</button>
+    <button class="btn" id="reset">↺ reset</button>
+  </div>
+    <div class="readout"><div class="ro"><div class="k">trials</div><div class="v" id="roN">0</div></div><div class="ro"><div class="k">brier</div><div class="v" id="roBrier">—</div></div><div class="ro"><div class="k">calibration error</div><div class="v" id="roECE">—</div></div><div class="ro"><div class="k">worth</div><div class="v" id="roWorth">—</div></div><div class="ro"><div class="k">verdict</div><div class="v" id="roVerdict">—</div></div><div class="ro"><div class="k">self-bias</div><div class="v" id="roBias">0.00</div></div></div>
+  </div>
+
+  <div class="honesty">
+    <div class="hz lit"><h4>◆ LIT — verified / checkable</h4><p>Everything on the plot is computed from actual sampled trials: the diagonal is <b>perfect calibration</b> by definition (reported confidence = empirical accuracy), each bar is the real hit-rate of trials that claimed that confidence, the shaded gap is the miscalibration. <b>ECE</b> (expected calibration error) and the <b>Brier score</b> are the standard, checkable measures — the worth of a self-report is exactly how close its bars sit to the diagonal. Drag SELF-BIAS and watch a confident-but-wrong reporter's worth collapse even as it keeps talking.</p></div>
+    <div class="hz amb"><h4>▲ AMBER — the figure</h4><p>The 'self-model' is a toy confidence channel with an injected bias and noise — it is a stand-in for introspective access, not the thing itself. No claim that the system <i>knows</i> itself; only that its self-report can be <b>scored</b> against outcomes. That scoring is the whole point: introspection you can't calibrate is worth assuming to be worth nothing.</p></div>
+    
+  </div>
+  <div class="law">SKYNET's law: everything can stop and say no — provided it says why.</div>
+  <div class="sig">David Lee Wise · ROOT0 · TriPod LLC &nbsp;·&nbsp; with <b>AVAN</b></div>
+</div>
+<div id="fail"></div>
+<script>
+window.onerror=function(m,s,l,c,e){var f=document.getElementById('fail');if(f){f.style.display='block';f.textContent='⚠ '+m+' @'+l+':'+c+(e&&e.stack?'\n'+e.stack:'');}};
+</script>
+<script>
+(function(){
+  var cv=document.getElementById('bg'); if(!cv) return;
+  function fallback(){ // never black-screen: 2D violet wash
+    var c=cv.getContext&&cv.getContext('2d'); if(!c)return;
+    function f(){ var w=cv.width=innerWidth, h=cv.height=innerHeight;
+      var g=c.createRadialGradient(w*0.5,h*0.42,0,w*0.5,h*0.42,Math.max(w,h)*0.8);
+      g.addColorStop(0,'#3a2170'); g.addColorStop(0.6,'#271351'); g.addColorStop(1,'#1a0e33');
+      c.fillStyle=g; c.fillRect(0,0,w,h);} f(); addEventListener('resize',f);
+  }
+  var gl; try{ gl=cv.getContext('webgl',{antialias:true,alpha:false})||cv.getContext('experimental-webgl'); }catch(e){}
+  if(!gl){ fallback(); return; }
+  // --- mat4 ---
+  function m4id(){return[1,0,0,0, 0,1,0,0, 0,0,1,0, 0,0,0,1];}
+  function m4mul(a,b){var o=new Array(16);for(var r=0;r<4;r++)for(var c=0;c<4;c++){var s=0;for(var k=0;k<4;k++)s+=a[k*4+r]*b[c*4+k];o[c*4+r]=s;}return o;}
+  function persp(f,asp,n,fa){var t=1/Math.tan(f/2);return[t/asp,0,0,0, 0,t,0,0, 0,0,(fa+n)/(n-fa),-1, 0,0,(2*fa*n)/(n-fa),0];}
+  function rotY(a){var c=Math.cos(a),s=Math.sin(a);return[c,0,-s,0, 0,1,0,0, s,0,c,0, 0,0,0,1];}
+  function rotX(a){var c=Math.cos(a),s=Math.sin(a);return[1,0,0,0, 0,c,s,0, 0,-s,c,0, 0,0,0,1];}
+  function trans(x,y,z){return[1,0,0,0, 0,1,0,0, 0,0,1,0, x,y,z,1];}
+  // --- geometry: uv sphere + torus ---
+  function sphere(rad,seg){var P=[],N=[],I=[];for(var i=0;i<=seg;i++){var v=i/seg*Math.PI;for(var j=0;j<=seg;j++){var u=j/seg*2*Math.PI;var x=Math.sin(v)*Math.cos(u),y=Math.cos(v),z=Math.sin(v)*Math.sin(u);P.push(x*rad,y*rad,z*rad);N.push(x,y,z);}}for(i=0;i<seg;i++)for(j=0;j<seg;j++){var a=i*(seg+1)+j,b=a+seg+1;I.push(a,b,a+1, b,b+1,a+1);}return{P:P,N:N,I:I};}
+  function torus(R,r,se,si){var P=[],N=[],I=[];for(var i=0;i<=se;i++){var u=i/se*2*Math.PI;for(var j=0;j<=si;j++){var v=j/si*2*Math.PI;var cx=Math.cos(u),sx=Math.sin(u),cv=Math.cos(v),sv=Math.sin(v);var x=(R+r*cv)*cx,y=r*sv,z=(R+r*cv)*sx;P.push(x,y,z);N.push(cv*cx,sv,cv*sx);}}for(i=0;i<se;i++)for(j=0;j<si;j++){var a=i*(si+1)+j,b=a+si+1;I.push(a,b,a+1,b,b+1,a+1);}return{P:P,N:N,I:I};}
+  function buf(g){var o={};o.p=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,o.p);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(g.P),gl.STATIC_DRAW);o.n=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,o.n);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array(g.N),gl.STATIC_DRAW);o.i=gl.createBuffer();gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,o.i);gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,new Uint16Array(g.I),gl.STATIC_DRAW);o.c=g.I.length;return o;}
+  var VS='attribute vec3 p;attribute vec3 n;uniform mat4 mvp,mv;varying vec3 vn,vp;void main(){vec4 wp=mv*vec4(p,1.0);vp=wp.xyz;vn=(mv*vec4(n,0.0)).xyz;gl_Position=mvp*vec4(p,1.0);}';
+  var FS='precision mediump float;varying vec3 vn,vp;uniform vec3 col,emi;void main(){vec3 N=normalize(vn);vec3 L=normalize(vec3(0.5,0.7,0.8));float d=max(dot(N,L),0.0);vec3 V=normalize(-vp);vec3 H=normalize(L+V);float s=pow(max(dot(N,H),0.0),24.0);float rim=pow(1.0-max(dot(N,V),0.0),2.5);vec3 c=col*(0.18+0.82*d)+vec3(1.0)*s*0.5+emi*(0.35+rim*0.9);gl_FragColor=vec4(c,1.0);}';
+  function sh(t,src){var s=gl.createShader(t);gl.shaderSource(s,src);gl.compileShader(s);if(!gl.getShaderParameter(s,gl.COMPILE_STATUS))throw gl.getShaderInfoLog(s);return s;}
+  var prog;try{prog=gl.createProgram();gl.attachShader(prog,sh(gl.VERTEX_SHADER,VS));gl.attachShader(prog,sh(gl.FRAGMENT_SHADER,FS));gl.linkProgram(prog);if(!gl.getProgramParameter(prog,gl.LINK_STATUS))throw gl.getProgramInfoLog(prog);}catch(e){fallback();return;}
+  gl.useProgram(prog);
+  var aP=gl.getAttribLocation(prog,'p'),aN=gl.getAttribLocation(prog,'n');
+  var uMVP=gl.getUniformLocation(prog,'mvp'),uMV=gl.getUniformLocation(prog,'mv'),uCol=gl.getUniformLocation(prog,'col'),uEmi=gl.getUniformLocation(prog,'emi');
+  var pupil=buf(sphere(0.85,40)), iris=buf(torus(1.55,0.20,60,24)), iris2=buf(torus(2.05,0.055,72,16));
+  gl.enable(gl.DEPTH_TEST);
+  function draw(o,mv,pr,col,emi){gl.bindBuffer(gl.ARRAY_BUFFER,o.p);gl.enableVertexAttribArray(aP);gl.vertexAttribPointer(aP,3,gl.FLOAT,false,0,0);gl.bindBuffer(gl.ARRAY_BUFFER,o.n);gl.enableVertexAttribArray(aN);gl.vertexAttribPointer(aN,3,gl.FLOAT,false,0,0);gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER,o.i);gl.uniformMatrix4fv(uMV,false,mv);gl.uniformMatrix4fv(uMVP,false,m4mul(pr,mv));gl.uniform3fv(uCol,col);gl.uniform3fv(uEmi,emi);gl.drawElements(gl.TRIANGLES,o.c,gl.UNSIGNED_SHORT,0);}
+  var t0=null;
+  function frame(t){requestAnimationFrame(frame);if(t0===null)t0=t;var tt=(t-t0)*0.001;
+    var w=cv.width=innerWidth,h=cv.height=innerHeight;gl.viewport(0,0,w,h);
+    gl.clearColor(0.102,0.055,0.200,1.0);gl.clear(gl.COLOR_BUFFER_BIT|gl.DEPTH_BUFFER_BIT);
+    var pr=persp(1.0,w/h,0.1,50);var base=m4mul(trans(0,0,-6.2),m4mul(rotX(-0.35+Math.sin(tt*0.2)*0.06),rotY(tt*0.16)));
+    draw(pupil,base,pr,[0.62,0.10,0.13],[0.85,0.12,0.14]);          // the pupil (skynet-red core)
+    draw(iris,base,pr,[0.42,0.30,0.68],[0.18,0.10,0.35]);           // iris ring (violet)
+    draw(iris2,m4mul(base,rotY(tt*0.5)),pr,[0.30,0.62,0.85],[0.10,0.30,0.5]); // thin cyan halo ring
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+<script>
+// ---- runtime: drives the per-sphere instrument (__INST__) on #stage ----
+(function(){
+  var cv=document.getElementById('stage'); var ctx=cv&&cv.getContext('2d'); if(!ctx)return;
+  var DPR=Math.min(window.devicePixelRatio||1,2);
+  function size(){var w=cv.clientWidth||900;cv.width=Math.round(w*DPR);cv.height=Math.round((w*440/900)*DPR);}
+  size(); addEventListener('resize',size);
+  var env={cv:cv,ctx:ctx,DPR:DPR,W:function(){return cv.width/DPR;},H:function(){return cv.height/DPR;},
+    set:function(id,val,cls){var e=document.getElementById(id);if(e){e.textContent=val;if(cls!=null)e.className='v '+cls;}}};
+  var t0=null, inited=false;
+  function loop(t){requestAnimationFrame(loop);if(t0===null)t0=t;env.t=(t-t0)*0.001;
+    if(!inited&&window.__INST__){inited=true;if(window.__INST__.init)window.__INST__.init(env);}
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+    if(window.__INST__&&window.__INST__.draw)window.__INST__.draw(env);}
+  requestAnimationFrame(loop);
+})();
+</script>
+<script>
+(function(){
+  var bias=0, noise=0.08, BIN=10, bins=[], N=0, brier=0, ece=0;
+  function reset(){bins=[];for(var i=0;i<BIN;i++)bins.push({n:0,c:0,sc:0});N=0;brier=0;ece=0;}
+  reset();
+  function randn(){return (Math.random()+Math.random()+Math.random()-1.5);}
+  function run(){
+    for(var k=0;k<600;k++){
+      var p=0.05+Math.random()*0.9;                 // true accuracy this trial
+      var c=Math.min(0.999,Math.max(0.001, p+bias+noise*randn()));  // self-reported confidence
+      var hit = Math.random()<p ? 1:0;
+      var bi=Math.min(BIN-1,Math.floor(c*BIN));
+      bins[bi].n++; bins[bi].c+=hit; bins[bi].sc+=c; N++;
+      brier += (c-hit)*(c-hit);
+    }
+    // ece
+    var e=0; for(var i=0;i<BIN;i++){ if(bins[i].n){ var acc=bins[i].c/bins[i].n, conf=bins[i].sc/bins[i].n; e+= bins[i].n/N*Math.abs(acc-conf); } }
+    ece=e;
+  }
+  function refresh(env){
+    env.set('roN', N);
+    env.set('roBias', bias.toFixed(2), Math.abs(bias)>0.15?'a':'');
+    if(!N){env.set('roBrier','—');env.set('roECE','—');env.set('roWorth','—');env.set('roVerdict','run trials','');return;}
+    env.set('roBrier',(brier/N).toFixed(3));
+    env.set('roECE',(ece*100).toFixed(1)+'%', ece<0.05?'g':(ece<0.12?'a':'r'));
+    var worth=Math.max(0,1-ece*4);
+    env.set('roWorth',(worth).toFixed(2), worth>0.7?'g':(worth>0.4?'a':'r'));
+    env.set('roVerdict', ece<0.05?'CALIBRATED — worth its word':(ece<0.12?'drifting':'CONFIDENT & WRONG'),
+            ece<0.05?'g':(ece<0.12?'a':'r'));
+  }
+  function wire(env){
+    document.getElementById('bias').oninput=function(e){bias=e.target.value/100;reset();refresh(env);};
+    document.getElementById('noise').oninput=function(e){noise=e.target.value/100;reset();refresh(env);};
+    document.getElementById('run').onclick=function(){run();refresh(env);};
+    document.getElementById('reset').onclick=function(){reset();refresh(env);};
+    run(); refresh(env);
+  }
+  window.__INST__={ init:function(env){wire(env);},
+    draw:function(env){
+      var c=env.ctx,w=env.W(),h=env.H(); c.clearRect(0,0,w,h);
+      var S=Math.min(w*0.5,h-70), ox=(w*0.5-S)*0.5+40, oy=20;
+      function X(v){return ox+v*S;} function Y(v){return oy+S-v*S;}
+      // frame + diagonal (perfect calibration)
+      c.strokeStyle='rgba(160,120,240,.28)';c.lineWidth=1;c.strokeRect(ox,oy,S,S);
+      c.strokeStyle='rgba(99,240,166,.6)';c.setLineDash([5,4]);c.beginPath();c.moveTo(X(0),Y(0));c.lineTo(X(1),Y(1));c.stroke();c.setLineDash([]);
+      c.fillStyle='rgba(99,240,166,.7)';c.font='600 10px ui-monospace,monospace';c.fillText('perfect calibration',X(0.34),Y(0.42));
+      // bars
+      var bw=S/BIN;
+      for(var i=0;i<BIN;i++){ if(!bins[i].n)continue; var conf=(i+0.5)/BIN, acc=bins[i].c/bins[i].n;
+        var gap=Math.abs(acc-conf); var col= gap<0.06?'99,240,166': (gap<0.15?'255,176,32':'255,77,84');
+        c.fillStyle='rgba('+col+',.55)'; c.fillRect(X(i/BIN)+2, Y(acc), bw-4, S*acc);
+        // gap to diagonal
+        c.strokeStyle='rgba('+col+',.9)';c.lineWidth=2;c.beginPath();c.moveTo(X(conf),Y(acc));c.lineTo(X(conf),Y(conf));c.stroke();
+      }
+      c.fillStyle='rgba(185,166,230,.7)';c.font='600 11px ui-monospace,monospace';c.textAlign='center';
+      c.fillText('reported confidence →',ox+S/2,oy+S+22); c.save();c.translate(ox-14,oy+S/2);c.rotate(-Math.PI/2);c.fillText('actual accuracy',0,0);c.restore();
+      // legend on the right
+      var lx=w*0.60, ly=60;
+      c.textAlign='left';c.fillStyle='var';
+      c.fillStyle='rgba(243,236,255,.9)';c.font='700 13px Segoe UI,system-ui';c.fillText('a self-report is worth',lx,ly);
+      c.fillText('its distance to the line',lx,ly+20);
+      c.fillStyle='rgba(185,166,230,.8)';c.font='600 12px ui-monospace,monospace';
+      c.fillText('bar ON diagonal  → worth its word',lx,ly+52);
+      c.fillText('bar FAR off      → confident noise',lx,ly+72);
+      c.fillText('the words never stop —',lx,ly+104);
+      c.fillText('only the calibration does.',lx,ly+122);
+    }
+  };
+})();
+</script>
+</body></html>
